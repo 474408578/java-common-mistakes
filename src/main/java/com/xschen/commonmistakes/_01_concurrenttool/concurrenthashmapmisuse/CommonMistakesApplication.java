@@ -1,4 +1,4 @@
-package com.xschen.commonmistakes._01_concurrenttool.concurrenthashmap;
+package com.xschen.commonmistakes._01_concurrenttool.concurrenthashmapmisuse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
