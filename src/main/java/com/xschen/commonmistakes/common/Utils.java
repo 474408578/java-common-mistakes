@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author xschen
@@ -42,5 +45,21 @@ public class Utils {
 
         System.out.println(gson.toJson(object));
     }
+
+    /**
+     * 打印线程池信息
+     * @param threadPoolExecutor
+     */
+    public static void printStats(ThreadPoolExecutor threadPoolExecutor) {
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            log.info("===========================================");
+            log.info("Pool Size: {}", threadPoolExecutor.getPoolSize());
+            log.info("Active Threads: {}", threadPoolExecutor.getActiveCount());
+            log.info("Number of Tasks completed: {}", threadPoolExecutor.getCompletedTaskCount());
+            log.info("Number of Tasks in Queue： {}", threadPoolExecutor.getQueue().size());
+            log.info("===========================================");
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
 
 }

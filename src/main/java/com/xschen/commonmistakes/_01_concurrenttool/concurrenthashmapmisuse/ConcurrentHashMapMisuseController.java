@@ -25,7 +25,6 @@ public class ConcurrentHashMapMisuseController {
     private static int THREAD_COUNT = 10;
     private static int ITEM_COUNT = 1000;
 
-
     private ConcurrentHashMap<String, Long> getData(int count) {
         // rangeClose包含结束点  range不包含结束点
         return LongStream.rangeClosed(1, count)
@@ -79,7 +78,4 @@ public class ConcurrentHashMapMisuseController {
         forkJoinPool.awaitTermination(1, TimeUnit.HOURS);
         return "ok";
     }
-
-
-
 }
