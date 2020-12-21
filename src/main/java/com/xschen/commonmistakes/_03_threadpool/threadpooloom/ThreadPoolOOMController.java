@@ -116,6 +116,41 @@ public class ThreadPoolOOMController {
         return atomicInteger.intValue();
     }
 
-    
+
+    @GetMapping("better")
+    public int better() {
+        // 这里开始激进线程池的实现
+        LinkedBlockingDeque<Runnable> queue = new LinkedBlockingDeque<Runnable>(10) {
+            // 先返回false, 造成队列满的假象，让线程池优先扩容
+            @Override
+            public boolean offer(Runnable runnable) {
+                return false;
+            }
+        };
+
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 5,
+                5, TimeUnit.SECONDS, queue,
+                new ThreadFactoryBuilder().setNameFormat("demo-threadpool-%d").build(),
+                (r, executor) -> {
+                    try {
+                        // 等出现拒绝后再加入队列
+                        // 如果希望队列满了阻塞线程，而不是抛出异常，可以修改如下三行代码为executor.getQueue().put(r);
+                        if (!executor.getQueue().offer(r, 0, TimeUnit.SECONDS)) {
+                            throw new RejectedExecutionException("ThreadPool Queue full, fail to offer " + r.toString());
+                        }
+                    } catch (InterruptedException e) {
+//                      // ？
+                        Thread.currentThread().interrupt();
+                    }
+                });
+        // 激进线程实现结束
+
+
+        Utils.printStats(threadPool);
+
+        AtomicInteger atomicInteger = new AtomicInteger();
+        
+    }
+
 
 }
