@@ -118,7 +118,7 @@ public class ThreadPoolOOMController {
 
 
     @GetMapping("better")
-    public int better() {
+    public int better() throws InterruptedException {
         // 这里开始激进线程池的实现
         LinkedBlockingDeque<Runnable> queue = new LinkedBlockingDeque<Runnable>(10) {
             // 先返回false, 造成队列满的假象，让线程池优先扩容
@@ -139,7 +139,8 @@ public class ThreadPoolOOMController {
                             throw new RejectedExecutionException("ThreadPool Queue full, fail to offer " + r.toString());
                         }
                     } catch (InterruptedException e) {
-//                      // ？
+                        // 设置当前线程的中断标志位，需要用户监视线程的状态并做处理
+                        // https://my.oschina.net/itblog/blog/787024
                         Thread.currentThread().interrupt();
                     }
                 });
@@ -149,7 +150,31 @@ public class ThreadPoolOOMController {
         Utils.printStats(threadPool);
 
         AtomicInteger atomicInteger = new AtomicInteger();
-        
+
+        IntStream.rangeClosed(1, 20).forEach(i -> {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            int id = atomicInteger.incrementAndGet();
+            try {
+                threadPool.submit(() -> {
+                    log.info("{} started", id);
+                    try {
+                        TimeUnit.SECONDS.sleep(10);
+                    } catch (InterruptedException e) {
+                    }
+                    log.info("{} finished", id);
+                });
+            } catch (Exception e) {
+                log.info("error submitting task {}", id, e);
+                atomicInteger.decrementAndGet();
+            }
+        });
+
+        TimeUnit.SECONDS.sleep(60);
+        return atomicInteger.intValue();
     }
 
 
