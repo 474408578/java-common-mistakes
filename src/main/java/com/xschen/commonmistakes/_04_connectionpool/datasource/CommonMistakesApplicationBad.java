@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CommonMistakesApplicationBad {
 
     public static void main(String[] args) {
-        Utils.loadPropertySource(CommonMistakesApplicationBad.class, "bad.properties");
+        Utils.loadPropertySource(CommonMistakesApplicationBad.class, "other/bad.properties");
         SpringApplication.run(CommonMistakesApplicationBad.class, args);
     }
 }
