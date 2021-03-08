@@ -1,7 +1,12 @@
 package com.xschen.commonmistakes._16_datetime.timezone;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -11,8 +16,11 @@ import java.util.TimeZone;
 
 public class CommonMistakesApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         test();
+        wrong1();
+        wrong2();
+        right();
     }
 
     /**
@@ -25,12 +33,57 @@ public class CommonMistakesApplication {
         System.out.println("test");
         System.out.println(new Date(0));
         // 当前时区相比 UTC 时差
-        System.out.println(TimeZone.getDefault().getID() + ":" + TimeZone.getDefault().getRawOffset() / 3600000);
-        ZoneId.getAvailableZoneIds().forEach(id ->
-                System.out.println(String.format("%s: %s", id, ZonedDateTime.now(ZoneId.of(id)))));
+        //System.out.println(TimeZone.getDefault().getID() + ":" + TimeZone.getDefault().getRawOffset() / 3600000);
+        //ZoneId.getAvailableZoneIds().forEach(id ->
+        //        System.out.println(String.format("%s: %s", id, ZonedDateTime.now(ZoneId.of(id)))));
     }
 
-    private static void wrong1() {
+    /**
+     * 不同时区转化得到的Date会得到不同的时间
+     * @throws ParseException
+     */
+    private static void wrong1() throws ParseException {
+        System.out.println("wrong1");
+        String stringDate = "2020-01-02 22:00:00";
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 默认时区解析表示
+        Date date1 = inputFormat.parse(stringDate);
+        System.out.println(date1);
+        // 美国过纽约时区
+        inputFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        Date date2 = inputFormat.parse(stringDate);
+        System.out.println(date2);
+    }
 
+    /**
+     * 同一个Date，在不同时区格式化得到不同时间表示
+     * @throws ParseException
+     */
+    public static void wrong2() throws ParseException {
+        System.out.println("wrong2");
+        String stringDate = "2020-01-02 22:00:00";
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date1 = inputFormat.parse(stringDate);
+        System.out.println(new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss Z]").format(date1));
+        TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
+        System.out.println(new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss Z]").format(date1));
+    }
+
+    public static void right() {
+        System.out.println("right");
+        String stringDate = "2020-01-02 22:00:00";
+        // 初始化3个时区
+        ZoneId timeZoneShanghai = ZoneId.of("Asia/Shanghai");
+        ZoneId timeZoneNewYork = ZoneId.of("America/New_York");
+        // 东京
+        ZoneId timeZoneJst = ZoneOffset.ofHours(9);
+
+        // 格式化器
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        ZonedDateTime date = ZonedDateTime.of(LocalDateTime.parse(stringDate, dateTimeFormatter), timeZoneJst);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
+        System.out.println(timeZoneShanghai.getId() + " " + outputFormatter.withZone(timeZoneShanghai).format(date));
+        System.out.println(timeZoneNewYork.getId() + " " + outputFormatter.withZone(timeZoneNewYork).format(date));
+        System.out.println(timeZoneJst.getId() + " " + outputFormatter.withZone(timeZoneJst).format(date));
     }
 }
