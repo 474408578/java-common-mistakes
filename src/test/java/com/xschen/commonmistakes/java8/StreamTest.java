@@ -1,4 +1,4 @@
-package com.xschen.java8;
+package com.xschen.commonmistakes.java8;
 
 import org.junit.Test;
 

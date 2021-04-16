@@ -43,7 +43,8 @@ public class ThreadLocalMisuseController {
             result.put("after", after);
             return result;
         } finally {
-            // 在finally代码块中删除ThreadLocal中的数据，确保数据不串
+            // 在finally代码块中删除ThreadLocal中的数据，确保数据不串，
+            // Spring开发中，可以使用aop来做操作
             currentUser.remove();
         }
     }
