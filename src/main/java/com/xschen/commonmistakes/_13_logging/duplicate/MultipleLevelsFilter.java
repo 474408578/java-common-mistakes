@@ -14,28 +14,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * 日志重复记录
  * @author xschen
  */
 
-public class MultipleLevelsFilter extends Filter<ILoggingEvent> {
-
-    @Getter
-    @Setter
-    private String levels;
-    private List<Integer> levelList;
-
-    @Override
-    public FilterReply decide(ILoggingEvent event) {
-        if (levelList == null && !StringUtils.isEmpty(levels)) {
-            levelList = Arrays.asList(levels.split("\\|")).stream()
-                    .map(item -> Level.valueOf(item))
-                    .map(level -> level.toInt())
-                    .collect(Collectors.toList());
-        }
-
-        if (levelList.contains(event.getLevel().toInt()))
-            return FilterReply.ACCEPT;
-        else
-            return FilterReply.DENY;
-    }
-}
+//public class MultipleLevelsFilter extends Filter<ILoggingEvent> {
+//
+//    @Getter
+//    @Setter
+//    private String levels;
+//    private List<Integer> levelList;
+//
+//    @Override
+//    public FilterReply decide(ILoggingEvent event) {
+//        if (levelList == null && !StringUtils.isEmpty(levels)) {
+//            levelList = Arrays.asList(levels.split("\\|")).stream()
+//                    .map(item -> Level.valueOf(item))
+//                    .map(level -> level.toInt())
+//                    .collect(Collectors.toList());
+//        }
+//
+//        if (levelList.contains(event.getLevel().toInt()))
+//            return FilterReply.ACCEPT;
+//        else
+//            return FilterReply.DENY;
+//    }
+//}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- 将 CONSOLE Appender 定义为 ConsoleAppender，也就是将日志输出到控制台（system.out/system.err） -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 通过 PatternLayout 定义日志的输出格式 -->
+        <!-- 可参考: http://logback.qos.ch/manual/layouts.html#PatternLayout -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger{40}:%line] - %msg%n</pattern>
+            <!-- %d{yyyy-MM-dd HH:mm:ss.SSS} 日期格式 -->
+            <!-- %thread: 线程名称 -->
+            <!-- %-5level 日志级别应该左对齐，宽度为5个字符   -->
+            <!-- %logger{40} 在日志记录事件的起源处，输出日志记录器的名称，{length} 表示日志记录器的长度   -->
+            <!-- %line：表示代码在多少行进行输出   -->
+            <!-- %msg 日志的输出内容   -->
+            <!-- %n 平台相关的行分隔符字符   -->
+        </layout>
+    </appender>
+
+
+    <!-- 打印信息向上传递，logger 打印一次， root 接到后又打印一次 -->
+
+    <!-- 自定义的 logger -->
+    <logger name="com.xschen.commonmistakes._13_logging.duplicate" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+
+    <!-- 设置全局日志级别为INFO, 日志输出使用ConsoleAppender  -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
