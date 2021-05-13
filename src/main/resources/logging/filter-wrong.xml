@@ -11,6 +11,7 @@
 
     <appender name="INFO_FILE" class="ch.qos.logback.core.FileAppender">
         <File>${logDir}/${app.name}_info.log</File>
+        <!-- 希望可以记录 INFO 级别的日志 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
         </filter>
@@ -22,6 +23,7 @@
 
     <appender name="ERROR_FILE" class="ch.qos.logback.core.FileAppender">
         <File>${logDir}/${app.name}_error.log</File>
+        <!-- 记录 WARN 级别以上的日志 -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
         </filter>
