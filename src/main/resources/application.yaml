@@ -9,13 +9,15 @@ spring:
     password: 123456
     platform: mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    hikari:
-#      maximum-pool-size: 100
-#      register-mbeans: true
+    hikari:
+      maximum-pool-size: 100
+      register-mbeans: true
 
 
 
 
   jpa:
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: create-drop
+      dialect: org.hibernate.dialect.MySQLInnoDBDialect
+    database-platform: org.hibernate.dialect.MySQLDialect

@@ -61,5 +61,29 @@ public class Utils {
         }, 0, 1, TimeUnit.SECONDS);
     }
 
+    /**
+     * sleep 等待，单位为 毫秒，已捕捉异常
+     * @param durationMillis
+     */
+    public static void sleepMillis(long durationMillis) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(durationMillis);
+        } catch (InterruptedException e) {
+            /**
+             *  将线程中断标志位置为true
+             */
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * sleep 等待，单位自己设置，已捕捉异常
+     * @param duration
+     * @param unit
+     */
+    public static void sleep(long duration, TimeUnit unit) {
+        long millis = unit.toMillis(duration);
+        sleepMillis(millis);
+    }
 
 }
