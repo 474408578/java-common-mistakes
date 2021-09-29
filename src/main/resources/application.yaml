@@ -20,4 +20,5 @@ spring:
     hibernate:
       ddl-auto: create-drop
       dialect: org.hibernate.dialect.MySQLInnoDBDialect
-    database-platform: org.hibernate.dialect.MySQLDialect
+    # 建表时，将存储引擎切换为 InnoDB
+    database-platform: org.hibernate.dialect.MySQL5Dialect

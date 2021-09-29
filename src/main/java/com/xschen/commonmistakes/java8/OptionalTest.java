@@ -19,7 +19,7 @@ public class OptionalTest {
         Optional.empty();
         // 使用非null值创建 Optional 对象
         Optional.of("Tom");
-        // 使用任意值创建 Optional 对象
+        // 可接受null的 Optional 对象
         Optional optional = Optional.ofNullable("Tom");
 
         // 判断是否引用缺失的方法(不建议使用)
